@@ -26,5 +26,6 @@ Route::middleware('auth')->group(function () {
 Route::get('/posts',[PostController::class, 'index'])->name('posts.index');
 Route::post('/posts',[PostController::class, 'store'])->name('posts.store');
 Route::get('/posts/delete/{id}',[PostController::class, 'destroy'])->name('posts.destroy');
+Route::get('/posts/{id}', [PostController::class, 'view'])->name('posts.view');
 
 require __DIR__.'/auth.php';

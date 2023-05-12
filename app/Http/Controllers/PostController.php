@@ -28,20 +28,27 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-        public function store(Request $request)
-        {
-            $post = new Post;
-            $post->title = $request->title;
-            $post->body = $request->body;
-            if($request->hasFile('image')){
-                $file = $request->file('image');
-                $path = Storage::putFile('public/images', $request->file('image'));
-                $nuevo_path = str_replace('public/', '', $path);
-                $post->image_url = $nuevo_path;
-            }
-            $post->save();
-            return redirect()->route('posts.index');
+    public function store(Request $request)
+    {
+        //
+        $post = new Post;
+        $post->title = $request->title;
+        $post->body = $request->body;
+        if($request->hasFile('image')){
+            $file = $request->file('image');
+            $path = Storage::putFile('public/images', $request->file('image'));
+            $nuevo_path = str_replace('public/', '', $path);
+            $post->image_url = $nuevo_path;
         }
+        $post->save();
+        return redirect()->route('posts.index');
+    }
+
+    public function view($post)
+    {
+        $post = Post::find($post);
+        return view('view', compact('post'));
+    }
 
     /**
      * Display the specified resource.
@@ -72,7 +79,11 @@ class PostController extends Controller
      */
     public function destroy($post_id)
     {
+        //
         $post = Post::find($post_id);
+        if($post->image_url){
+            Storage::delete('public/'.$post->image_url);
+        }
         $post->delete();
         return redirect()->route('posts.index');
     }

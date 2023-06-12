@@ -19,7 +19,10 @@ return new class extends Migration
             $table->text('image_url')->nullable();
             $table->string('video_url')->nullable();
             $table->boolean('active')->default(true);
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
